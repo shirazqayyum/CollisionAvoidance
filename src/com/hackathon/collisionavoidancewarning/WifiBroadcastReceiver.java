@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.util.Log;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
@@ -30,8 +31,13 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	            }
 	        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
-	            // The peer list has changed!  We should probably do something about
-	            // that.
+	        	 // request available peers from the wifi p2p manager. This is an
+	            // asynchronous call and the calling activity is notified with a
+	            // callback on PeerListListener.onPeersAvailable()
+	            if (mManager != null) {
+	                mManager.requestPeers(mChannel, mActivity);
+	                Log.d(TAG, "peers requested");
+	            }
 
 	        } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
@@ -47,9 +53,10 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	        }
 	    }
 	 
+	 
 	 /* instance variables */
 	 	private WifiP2pManager mManager;
 	    private Channel mChannel;
 	    private MainActivity mActivity;
-
+	    private String TAG = "Broadcast";
 }
