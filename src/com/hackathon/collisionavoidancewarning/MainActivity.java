@@ -6,9 +6,11 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
@@ -53,17 +55,22 @@ public class MainActivity extends Activity implements PeerListListener{
 
 	private void setupAdapter() {
 		/* Setup an array adapter to be used as a pipe b/w the mPeers array and the listView */
+		
 		mAdapter = new ArrayAdapter<WifiP2pDevice>(this,android.R.layout.simple_list_item_1, mPeers);
 		ListView listView = (ListView) findViewById(R.id.listViewPeers);
 		listView.setAdapter(mAdapter);
 		
 		/* A user can select the device to connect to from the list view */
+		
 		listView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				WifiP2pDevice d = mPeers.get(arg2);
-				Toast.makeText(getApplicationContext(), d.deviceAddress,Toast.LENGTH_SHORT).show();				
+				final WifiP2pDevice device = mPeers.get(arg2);	
+				
+				WifiP2pConfig config = new WifiP2pConfig();
+				config.deviceAddress = device.deviceAddress;
+				mManager.connect(mChannel, config, null);
 			}
 		});
 	}

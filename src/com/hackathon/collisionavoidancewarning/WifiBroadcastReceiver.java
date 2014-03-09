@@ -3,14 +3,15 @@ package com.hackathon.collisionavoidancewarning;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
+import android.widget.Toast;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
-	public WifiBroadcastReceiver(WifiP2pManager manager, Channel channel,
-            MainActivity activity) {
+	public WifiBroadcastReceiver(WifiP2pManager manager, Channel channel, MainActivity activity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
@@ -31,24 +32,29 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	            }
 	        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
-	        	 // request available peers from the wifi p2p manager. This is an
-	            // asynchronous call and the calling activity is notified with a
-	            // callback on PeerListListener.onPeersAvailable()
+	        	 /* request available peers from the wifi p2p manager. This is an
+	        	  * asynchronous call and the calling activity is notified with a
+	        	  * callback on PeerListListener.onPeersAvailable()
+	        	  */
 	            if (mManager != null) {
 	                mManager.requestPeers(mChannel, mActivity);
 	                Log.d(TAG, "peers requested");
 	            }
 
 	        } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+	        	
+	        	/* Connection information changed */	
+	        	if (mManager == null) return;
+	        	NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+	        	if (networkInfo.isConnected()) {
+	        		// open a stream of data
+			    	Toast.makeText(mActivity.getApplicationContext(), "connected" ,Toast.LENGTH_SHORT).show();
 
-	            // Connection state changed!  We should probably do something about
-	            // that.
+	        	} else {
+	        		// close any stream of data
+	        	}
 
 	        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-//	            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
-//	                    .findFragmentById(R.id.frag_list);
-//	            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
-//	                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
 
 	        }
 	    }
