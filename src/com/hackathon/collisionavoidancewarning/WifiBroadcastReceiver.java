@@ -3,14 +3,18 @@ package com.hackathon.collisionavoidancewarning;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
-	public WifiBroadcastReceiver() {
-		// TODO Auto-generated constructor stub
-	}
+	public WifiBroadcastReceiver(WifiP2pManager manager, Channel channel,
+            MainActivity activity) {
+        super();
+        this.mManager = manager;
+        this.mChannel = channel;
+        this.mActivity = activity;
+    }
 
 	 @Override
 	    public void onReceive(Context context, Intent intent) {
@@ -20,9 +24,9 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	            // the Activity.
 	            int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 	            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-	                MainActivity.wifiEnabled = true;
+	                mActivity.wifiEnabled = true;
 	            } else {
-	                MainActivity.wifiEnabled = false;
+	                mActivity.wifiEnabled = false;
 	            }
 	        } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
@@ -42,5 +46,10 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
 	        }
 	    }
+	 
+	 /* instance variables */
+	 	private WifiP2pManager mManager;
+	    private Channel mChannel;
+	    private MainActivity mActivity;
 
 }

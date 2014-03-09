@@ -24,6 +24,19 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+    
+	/** register the BroadcastReceiver with the intent values to be matched */
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(mReceiver, mIntentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(mReceiver);
+    }
 	
 	private void setupWifi() {
 		//  Indicates a change in the Wi-Fi P2P status.
@@ -40,6 +53,7 @@ public class MainActivity extends Activity {
 	    
 	    mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 	    mChannel = mManager.initialize(this, getMainLooper(), null);
+        mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this);
 	}
 	
 	
@@ -47,8 +61,10 @@ public class MainActivity extends Activity {
 	private final IntentFilter mIntentFilter = new IntentFilter();
 	private Channel mChannel;
 	private WifiP2pManager mManager;
+	private WifiBroadcastReceiver mReceiver;
+	public boolean wifiEnabled = false;
 	
 	/* class variables */
-	public static boolean wifiEnabled = false;
+	
 
 }
