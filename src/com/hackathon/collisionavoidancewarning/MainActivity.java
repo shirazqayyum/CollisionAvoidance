@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -42,7 +44,6 @@ public class MainActivity extends Activity implements PeerListListener{
             		    @Override
             		    public void onFailure(int reasonCode) {
             		    	Log.d(TAG, "discovery failed");
-
             		    }
             		});                 
                  mAdapter.notifyDataSetChanged();
@@ -51,9 +52,20 @@ public class MainActivity extends Activity implements PeerListListener{
 	}
 
 	private void setupAdapter() {
+		/* Setup an array adapter to be used as a pipe b/w the mPeers array and the listView */
 		mAdapter = new ArrayAdapter<WifiP2pDevice>(this,android.R.layout.simple_list_item_1, mPeers);
 		ListView listView = (ListView) findViewById(R.id.listViewPeers);
-		listView.setAdapter(mAdapter);		
+		listView.setAdapter(mAdapter);
+		
+		/* A user can select the device to connect to from the list view */
+		listView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				WifiP2pDevice d = mPeers.get(arg2);
+				Toast.makeText(getApplicationContext(), d.deviceAddress,Toast.LENGTH_SHORT).show();				
+			}
+		});
 	}
 
 	@Override
@@ -76,7 +88,10 @@ public class MainActivity extends Activity implements PeerListListener{
         unregisterReceiver(mReceiver);
     }
 	
-    /* PeerListListener interface method that needs to be implemented */
+    /* PeerListListener interface method that needs to be implemented which finally gives an updated
+     * list of the peers available after discovery. It also gets called when the peers are no longer available
+     * (though still in proximity) usually happens when the user does not take any action 
+     */
     @Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
     	 mPeers.clear();
