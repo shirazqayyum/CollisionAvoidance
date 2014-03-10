@@ -132,7 +132,11 @@ public class MainActivity extends Activity implements PeerListListener{
 	    mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 	    mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this);
-       
+        
+        /* Initialize the connectionInfoListener - used in WifiBroadcastReceiver when 
+         * connection is made
+         */
+        mClientServerMaker = new ClientServerMaker();
 	}
 	
 	ClientServerMaker getClientServerMaker() {

@@ -49,7 +49,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	        	if (mManager == null) return;
 	        	NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 	        	if (networkInfo.isConnected()) {
-	        		/* open a stream of data */
+	        		/* Setup sockets, use the connectionInfoListener i.e. ClientServerMaker */
+	        		
 			    	Toast.makeText(mActivity.getApplicationContext(), "connected" ,Toast.LENGTH_SHORT).show();
 			    	mManager.requestConnectionInfo(mChannel, mActivity.getClientServerMaker());
 	        	} else {
