@@ -7,22 +7,51 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
-
-    <Button
+    
+     <Button
         android:id="@+id/discPeers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
         android:text="Discover Peers" />
 
     <ListView
         android:id="@+id/listViewPeers"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="100dp"
         android:layout_alignLeft="@+id/discPeers"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="25dp" >
+        android:layout_below="@+id/discPeers" >
+
     </ListView>
+
+    <TextView
+        android:id="@+id/showData"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignLeft="@+id/listViewPeers"
+        android:layout_below="@+id/listViewPeers"
+        android:text="TextView" />
+    
+     <Button
+        android:id="@+id/sendData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enterText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="Send Data" />
+
+     <EditText
+         android:id="@+id/enterText"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/showData"
+         android:layout_centerHorizontal="true"
+         android:ems="10" >
+
+         
+     </EditText>
 
 </RelativeLayout>

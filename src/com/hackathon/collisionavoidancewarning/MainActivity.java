@@ -6,11 +6,11 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
@@ -60,14 +60,14 @@ public class MainActivity extends Activity implements PeerListListener{
 		ListView listView = (ListView) findViewById(R.id.listViewPeers);
 		listView.setAdapter(mAdapter);
 		
-		/* A user can select the device to connect to from the list view */
-		
+		/* 
+		 * A user can select the device to connect to from the list view 
+		 */
 		listView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				final WifiP2pDevice device = mPeers.get(arg2);	
-				
 				WifiP2pConfig config = new WifiP2pConfig();
 				config.deviceAddress = device.deviceAddress;
 				mManager.connect(mChannel, config, null);
@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements PeerListListener{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		/* Inflate the menu; this adds items to the action bar if it is present.*/
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -93,6 +93,8 @@ public class MainActivity extends Activity implements PeerListListener{
     public void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
+        mWifi.setWifiEnabled(false);
+        
     }
 	
     /* PeerListListener interface method that needs to be implemented which finally gives an updated
@@ -112,25 +114,33 @@ public class MainActivity extends Activity implements PeerListListener{
     
     
 	private void setupWifi() {
-		//  Indicates a change in the Wi-Fi P2P status.
+		
+		mWifi = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+		mWifi.setWifiEnabled(true);
+		/*  Indicates a change in the Wi-Fi P2P status. */
 		mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 
-	    // Indicates a change in the list of available peers.
+	    /* Indicates a change in the list of available peers. */
 	    mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
 
-	    // Indicates the state of Wi-Fi P2P connectivity has changed.
+	    /* Indicates the state of Wi-Fi P2P connectivity has changed.*/
 	    mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
 
-	    // Indicates this device's details have changed.
+	    /* Indicates this device's details have changed. */
 	    mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 	    
 	    mManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 	    mChannel = mManager.initialize(this, getMainLooper(), null);
         mReceiver = new WifiBroadcastReceiver(mManager, mChannel, this);
+       
 	}
 	
+	ClientServerMaker getClientServerMaker() {
+		return this.mClientServerMaker;
+	}
 	
 	/* instance variables */
+	
 	private final IntentFilter mIntentFilter = new IntentFilter();
 	private Channel mChannel;
 	private WifiP2pManager mManager;
@@ -140,6 +150,8 @@ public class MainActivity extends Activity implements PeerListListener{
     private String TAG = "MainActivity";
     private Button discoverPeers;
     private ArrayAdapter<WifiP2pDevice> mAdapter;
+    private WifiManager mWifi;
+    private ClientServerMaker mClientServerMaker;
 
 	
 	/* class variables */
