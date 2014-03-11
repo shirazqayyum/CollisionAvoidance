@@ -136,7 +136,7 @@ public class MainActivity extends Activity implements PeerListListener{
         /* Initialize the connectionInfoListener - used in WifiBroadcastReceiver when 
          * connection is made
          */
-        mClientServerMaker = new ClientServerMaker();
+        mClientServerMaker = new ClientServerMaker(this);
 	}
 	
 	ClientServerMaker getClientServerMaker() {

@@ -7,13 +7,16 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.util.Log;
 
 public class ClientServerMaker implements ConnectionInfoListener{
-
+	public ClientServerMaker(Context c) {
+		this.mContext = c;
+	}
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		mInfo = info;
@@ -30,8 +33,8 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							PrintWriter write_to_client = new PrintWriter(client_socket.getOutputStream());
 							BufferedReader read_from_client = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 							
-							Intent write_gps = new Intent(this, WriteGpsService.class);
-							Intent read_gps = new Intent(this, ReadGpsService.class);
+							Intent write_gps = new Intent(mContext, WriteGpsService.class);
+							Intent read_gps = new Intent(mContext, ReadGpsService.class);
 							
 							startService(write_gps);
 							startService(read_gps);
@@ -74,5 +77,6 @@ public class ClientServerMaker implements ConnectionInfoListener{
 	}
 	
 	WifiP2pInfo mInfo;
+	Context mContext;
 
 }
