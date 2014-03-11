@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.util.Log;
@@ -16,6 +17,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		mInfo = info;
+
 		if (info.groupFormed) {
 			if (info.isGroupOwner) {
 				/* I am the group owner so create a server socket */
@@ -26,12 +28,13 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							Socket client_socket = server_socket.accept();
 							
 							PrintWriter write_to_client = new PrintWriter(client_socket.getOutputStream());
-							write_to_client.println("A string from the server group owner");
-							write_to_client.flush();
-							Log.d("ClientServerMaker", "seeeeeeeeeeeeenntt");
-
+							BufferedReader read_from_client = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 							
-							client_socket.close();
+							Intent write_gps = new Intent(this, WriteGpsService.class);
+							Intent read_gps = new Intent(this, ReadGpsService.class);
+							
+							startService(write_gps);
+							startService(read_gps);
 							
 						} catch (IOException e) {
 						
