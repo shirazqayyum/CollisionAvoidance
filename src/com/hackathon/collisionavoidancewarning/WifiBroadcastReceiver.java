@@ -50,11 +50,15 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	        	NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 	        	if (networkInfo.isConnected()) {
 	        		/* Setup sockets, use the connectionInfoListener i.e. ClientServerMaker */
-	        		
-			    	Toast.makeText(mActivity.getApplicationContext(), "connected" ,Toast.LENGTH_SHORT).show();
-			    	mManager.requestConnectionInfo(mChannel, mActivity.getClientServerMaker());
+	        		if (!mActivity.mSocketConnected) {
+	        			mManager.requestConnectionInfo(mChannel, mActivity.getClientServerMaker());
+	        			Toast.makeText(mActivity.getApplicationContext(), "Sockets are made" ,Toast.LENGTH_SHORT).show();
+	        			mActivity.mSocketConnected = true;
+	        		}
 	        	} else {
-	        		/* close any stream of data */
+	        		/* For now just signal that we are not connected (may create problems with multiple devices) */
+	        		mActivity.mSocketConnected = false;
+	        		
 	        	}
 
 	        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {

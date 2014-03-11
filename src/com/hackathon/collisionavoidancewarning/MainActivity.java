@@ -143,6 +143,8 @@ public class MainActivity extends Activity implements PeerListListener{
 		return this.mClientServerMaker;
 	}
 	
+	
+	
 	/* instance variables */
 	
 	private final IntentFilter mIntentFilter = new IntentFilter();
@@ -156,6 +158,7 @@ public class MainActivity extends Activity implements PeerListListener{
     private ArrayAdapter<WifiP2pDevice> mAdapter;
     private WifiManager mWifi;
     private ClientServerMaker mClientServerMaker;
+    public boolean mSocketConnected = false;  /* May create problems with multiple devices */
 
 	
 	/* class variables */
