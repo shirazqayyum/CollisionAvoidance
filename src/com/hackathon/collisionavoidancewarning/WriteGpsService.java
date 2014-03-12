@@ -2,6 +2,7 @@ package com.hackathon.collisionavoidancewarning;
 
 import java.io.PrintWriter;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,21 +15,13 @@ import android.os.IBinder;
 
 public class WriteGpsService extends Service implements LocationListener{
 
-
 	@Override
-	public void onCreate() {
-		super.onCreate();
+	public void onCreate(){
 		/* Grab the location manager and poll for position when position changes */
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+	    LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
-		return super.onStartCommand(intent, flags, startId);
-	}
-
+	
 	/** method for clients */
     public void setWriter (PrintWriter print_writer){
     	mWriter = print_writer;
@@ -73,4 +66,5 @@ public class WriteGpsService extends Service implements LocationListener{
 	/* Binder given to clients */
     private final IBinder mBinder = new LocalBinder();
     private PrintWriter mWriter;
+	
 }
