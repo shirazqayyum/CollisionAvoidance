@@ -36,8 +36,8 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							Intent write_gps = new Intent(mContext, WriteGpsService.class);
 							Intent read_gps = new Intent(mContext, ReadGpsService.class);
 							
-							startService(write_gps);
-							startService(read_gps);
+							mContext.startService(write_gps);
+							mContext.startService(read_gps);
 							
 						} catch (IOException e) {
 						
@@ -56,11 +56,15 @@ public class ClientServerMaker implements ConnectionInfoListener{
 						try {
 							Socket socket_to_server = new Socket(mInfo.groupOwnerAddress.getHostAddress(), 5000);
 							Thread.sleep(2000);
-							InputStreamReader isr = new InputStreamReader(socket_to_server.getInputStream());
-							BufferedReader buf = new BufferedReader(isr);
 							
-							Log.d("ClientServerMaker",buf.readLine());
-							socket_to_server.close();
+							PrintWriter write_to_client = new PrintWriter(socket_to_server.getOutputStream());
+							BufferedReader read_from_client = new BufferedReader(new InputStreamReader(socket_to_server.getInputStream()));
+							
+							Intent write_gps = new Intent(mContext, WriteGpsService.class);
+							Intent read_gps = new Intent(mContext, ReadGpsService.class);
+							
+							mContext.startService(write_gps);
+							mContext.startService(read_gps);
 							
 							
 						} catch (Exception e) {
