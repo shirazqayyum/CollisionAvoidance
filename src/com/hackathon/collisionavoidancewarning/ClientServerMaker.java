@@ -7,16 +7,26 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.os.IBinder;
 import android.util.Log;
 
+import com.hackathon.collisionavoidancewarning.WriteGpsService.LocalBinder;
+
 public class ClientServerMaker implements ConnectionInfoListener{
+	
 	public ClientServerMaker(Context c) {
 		this.mContext = c;
+		  // Bind to LocalService
+        Intent intent = new Intent(mContext, WriteGpsService.class);
+        mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
+	
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		mInfo = info;
@@ -34,8 +44,8 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							BufferedReader read_from_client = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 							
 							Log.d(TAG, "connection with client made - i am the server");
-							//mLoc_writer = new LocationWriter(write_to_client, mContext);
-							
+							mService.setWriter(write_to_client);
+							//mContext.startService(new Intent(mContext, WriteGpsService.class));							
 							Log.d(TAG, "Location writer is created");
 
 							String msg;
@@ -66,8 +76,10 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							PrintWriter write_to_server = new PrintWriter(socket_to_server.getOutputStream());
 							BufferedReader read_from_server = new BufferedReader(new InputStreamReader(socket_to_server.getInputStream()));
 
-							mContext.startService(this, WriteGpsService.class);
+							//mContext.startService(new Intent(mContext, WriteGpsService.class));
 							//mLoc_writer = new LocationWriter(write_to_server, mContext);
+							mService.setWriter(write_to_server);
+
 							
 							String msg;
 							while ( (msg = read_from_server.readLine()) != null ) {
@@ -89,6 +101,27 @@ public class ClientServerMaker implements ConnectionInfoListener{
 		}
 	}
 	
+	
+	   /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+	
+	private boolean mBound;
+	private WriteGpsService  mService;
 	private WifiP2pInfo mInfo;
 	private Context mContext;
 	private LocationWriter mLoc_writer;

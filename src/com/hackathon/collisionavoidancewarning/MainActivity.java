@@ -145,6 +145,9 @@ public class MainActivity extends Activity implements PeerListListener{
 	
 	
 	
+	
+	
+	
 	/* instance variables */
 	
 	private final IntentFilter mIntentFilter = new IntentFilter();

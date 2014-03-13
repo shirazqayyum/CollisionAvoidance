@@ -41,7 +41,8 @@ public class WriteGpsService extends Service implements LocationListener{
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		mWriter.println(location.toString());	
+		if (mWriter != null)
+			mWriter.println(location.toString());	
 	}
 
 	@Override
