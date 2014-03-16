@@ -34,24 +34,6 @@
         android:layout_below="@+id/listViewPeers"
         android:text="TextView" />
     
-     <Button
-        android:id="@+id/sendData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/enterText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:text="Send Data" />
-
-     <EditText
-         android:id="@+id/enterText"
-         android:layout_width="match_parent"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/showData"
-         android:layout_centerHorizontal="true"
-         android:ems="10" >
-
-         
-     </EditText>
+  
 
 </RelativeLayout>
