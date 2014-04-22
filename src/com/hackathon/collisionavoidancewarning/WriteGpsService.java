@@ -21,11 +21,9 @@ public class WriteGpsService extends Service implements LocationListener{
 	public void onCreate(){
 		/* Grab the location manager and poll for position when position changes */
 	    LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+	    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
 	    
 	    mBroadcaster = LocalBroadcastManager.getInstance(this);
-	    
-
 	}
 	
 	/** method for clients */
@@ -56,11 +54,14 @@ public class WriteGpsService extends Service implements LocationListener{
 			to_send += ((Double) location.getLongitude()).toString()+ " ";
 			to_send += ((Long) location.getTime()).toString()+ " ";
 			to_send += ((Float) location.getBearing()).toString()+ " ";
-			to_send += ((Float) location.getSpeed()).toString()+ "\n";
+			to_send += ((Float) location.getSpeed()).toString();
 			
 			mWriter.println(to_send);
 			if (mExternalLocation.length() != 0) {
 				calculateDistance(to_send);
+			} else {
+				++ctr;
+				sendResult("broadcast works"+ ctr + "");
 			}
 		}
 		Log.d("MyLoc", "local: " + location.toString() );
@@ -110,5 +111,6 @@ public class WriteGpsService extends Service implements LocationListener{
     private LocalBroadcastManager mBroadcaster;
     public static final String COPA_RESULT = "com.controlj.copame.backend.COPAService.REQUEST_PROCESSED";
     public static final String COPA_MSG = "MSG"; 
+    private int ctr = 0;
 	
 }

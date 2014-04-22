@@ -15,7 +15,7 @@ public class LocationWriter implements LocationListener {
 		mContext = c;
 		/* Grab the location manager and poll for position when position changes */
         LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
 	}
 	@Override
 	public void onLocationChanged(Location location) {
