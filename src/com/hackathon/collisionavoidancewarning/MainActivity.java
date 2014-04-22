@@ -62,9 +62,9 @@ public class MainActivity extends Activity implements PeerListListener{
 		gps_receiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
-	            String s = intent.getStringExtra(WriteGpsService.COPA_MSG);
+	            
 	            // do something here.
-	            textView1.setText(s);
+	            
 	        }
 	    };
 		
@@ -104,7 +104,7 @@ public class MainActivity extends Activity implements PeerListListener{
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver((gps_receiver), new IntentFilter(WriteGpsService.COPA_RESULT));
+        
         registerReceiver(mReceiver, mIntentFilter);
     }
 
