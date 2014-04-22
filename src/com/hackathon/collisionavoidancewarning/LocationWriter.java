@@ -43,4 +43,5 @@ public class LocationWriter implements LocationListener {
 	}
 	private PrintWriter mWriter;
 	private Context mContext;
+	
 }

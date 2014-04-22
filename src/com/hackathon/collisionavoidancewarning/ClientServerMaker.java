@@ -50,7 +50,8 @@ public class ClientServerMaker implements ConnectionInfoListener{
 
 							String msg;
 							while ( (msg = read_from_client.readLine()) != null ) {
-								Log.d(TAG, "from client: " + msg);
+								Log.d("MyLoc", "from client: " + msg);
+								mService.setExternalLocation(msg);
 							}
 							
 							server_socket.close();
@@ -78,12 +79,14 @@ public class ClientServerMaker implements ConnectionInfoListener{
 
 							//mContext.startService(new Intent(mContext, WriteGpsService.class));
 							//mLoc_writer = new LocationWriter(write_to_server, mContext);
+							Log.d(TAG, "connection with client made - i am the client");
 							mService.setWriter(write_to_server);
 
 							
 							String msg;
 							while ( (msg = read_from_server.readLine()) != null ) {
-								Log.d(TAG, "from server: " + msg);
+								Log.d("MyLoc", "from server: " + msg);
+								mService.setExternalLocation(msg);
 							}
 							
 							socket_to_server.close();
@@ -100,7 +103,6 @@ public class ClientServerMaker implements ConnectionInfoListener{
 			
 		}
 	}
-	
 	
 	   /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {

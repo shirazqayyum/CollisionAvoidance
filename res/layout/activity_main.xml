@@ -27,13 +27,12 @@
     </ListView>
 
     <TextView
-        android:id="@+id/showData"
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="100dp"
         android:layout_alignLeft="@+id/listViewPeers"
-        android:layout_below="@+id/listViewPeers"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="27dp"
         android:text="TextView" />
-    
-  
 
 </RelativeLayout>
