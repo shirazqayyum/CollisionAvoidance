@@ -92,7 +92,7 @@ public class WriteGpsService extends Service implements LocationListener{
 		String[] inArray = mExternalLocation.split("\\s+");
 		String[] outArray = d.split("\\s+");
 		Location.distanceBetween(Double.parseDouble(inArray[0]), Double.parseDouble(inArray[1]), 
-				Double.parseDouble(outArray[0]), Double.parseDouble(outArray[0]), results);
+				Double.parseDouble(outArray[0]), Double.parseDouble(outArray[1]), results);
 		sendResult(""+results[0]);
 	}
 	

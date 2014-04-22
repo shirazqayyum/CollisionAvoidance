@@ -97,6 +97,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 					}
 				});
 				
+				
 				worker_client.start();
 			}
 		} else {
