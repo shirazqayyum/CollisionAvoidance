@@ -34,7 +34,6 @@ public class MainActivity extends Activity implements PeerListListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	
 		
 		setupAdapter();
 		setupWifi();
@@ -59,10 +58,10 @@ public class MainActivity extends Activity implements PeerListListener{
 		
 		final TextView textView1 = (TextView)findViewById(R.id.textView1);
 		
-		gps_receiver = new BroadcastReceiver() {
+		mGpsReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
-	            String s = intent.getStringExtra(WriteGpsService.COPA_MSG);
+	            String s = intent.getStringExtra(WriteGpsService.DIST_MSG);
 	            // do something here.
 	            textView1.setText(s);
 	        }
@@ -104,7 +103,7 @@ public class MainActivity extends Activity implements PeerListListener{
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver((gps_receiver), new IntentFilter(WriteGpsService.COPA_RESULT));
+        LocalBroadcastManager.getInstance(this).registerReceiver((mGpsReceiver), new IntentFilter(WriteGpsService.DIST_RESULT));
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -112,10 +111,9 @@ public class MainActivity extends Activity implements PeerListListener{
     public void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(gps_receiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGpsReceiver);
 
-        mWifi.setWifiEnabled(false);
-        
+       // mWifi.setWifiEnabled(false);   
     }
 	
     /* PeerListListener interface method that needs to be implemented which finally gives an updated
@@ -171,7 +169,7 @@ public class MainActivity extends Activity implements PeerListListener{
 	private Channel mChannel;
 	private WifiP2pManager mManager;
 	private WifiBroadcastReceiver mReceiver;
-	private BroadcastReceiver gps_receiver;
+	private BroadcastReceiver mGpsReceiver;
 	public boolean wifiEnabled = false;
     private List<WifiP2pDevice> mPeers = new ArrayList<WifiP2pDevice>();
     private String TAG = "MainActivity";

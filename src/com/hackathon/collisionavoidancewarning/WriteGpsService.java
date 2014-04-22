@@ -82,8 +82,7 @@ public class WriteGpsService extends Service implements LocationListener{
 	
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 	
 	public void calculateDistance(String d) {
@@ -98,9 +97,9 @@ public class WriteGpsService extends Service implements LocationListener{
 	
 	
 	public void sendResult(String message) {
-	    Intent intent = new Intent(COPA_RESULT);
+	    Intent intent = new Intent(DIST_RESULT);
 	    if(message != null)
-	        intent.putExtra(COPA_MSG, message);
+	        intent.putExtra(DIST_MSG, message);
 	    mBroadcaster.sendBroadcast(intent);
 	}
 
@@ -109,8 +108,8 @@ public class WriteGpsService extends Service implements LocationListener{
     private PrintWriter mWriter;
     private String mExternalLocation = "";
     private LocalBroadcastManager mBroadcaster;
-    public static final String COPA_RESULT = "com.controlj.copame.backend.COPAService.REQUEST_PROCESSED";
-    public static final String COPA_MSG = "MSG"; 
+    public static final String DIST_RESULT = "com.hackathon.collisionavoidancewarning.REQUEST_PROCESSED";
+    public static final String DIST_MSG = "MSG"; 
     private int ctr = 0;
 	
 }

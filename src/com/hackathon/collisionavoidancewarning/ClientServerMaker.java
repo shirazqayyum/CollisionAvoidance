@@ -123,6 +123,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
         }
     };
 	
+    
 	private boolean mBound;
 	private WriteGpsService  mService;
 	private WifiP2pInfo mInfo;
