@@ -40,7 +40,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							ServerSocket server_socket = new ServerSocket(5000);
 							Socket client_socket = server_socket.accept();
 							
-							PrintWriter write_to_client = new PrintWriter(client_socket.getOutputStream());
+							PrintWriter write_to_client = new PrintWriter(client_socket.getOutputStream(), true);
 							BufferedReader read_from_client = new BufferedReader(new InputStreamReader(client_socket.getInputStream()));
 							
 							Log.d(TAG, "connection with client made - i am the server");
@@ -74,7 +74,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							Socket socket_to_server = new Socket(mInfo.groupOwnerAddress.getHostAddress(), 5000);
 							Thread.sleep(2000);
 							
-							PrintWriter write_to_server = new PrintWriter(socket_to_server.getOutputStream());
+							PrintWriter write_to_server = new PrintWriter(socket_to_server.getOutputStream(), true);
 							BufferedReader read_from_server = new BufferedReader(new InputStreamReader(socket_to_server.getInputStream()));
 
 							//mContext.startService(new Intent(mContext, WriteGpsService.class));
