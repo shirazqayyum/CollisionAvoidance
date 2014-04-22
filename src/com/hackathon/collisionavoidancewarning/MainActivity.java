@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -14,6 +16,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements PeerListListener{
@@ -30,6 +34,7 @@ public class MainActivity extends Activity implements PeerListListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+	
 		
 		setupAdapter();
 		setupWifi();
@@ -50,7 +55,20 @@ public class MainActivity extends Activity implements PeerListListener{
             		});                 
                  mAdapter.notifyDataSetChanged();
              }
-         });	 
+         });
+		
+		final TextView textView1 = (TextView)findViewById(R.id.textView1);
+		
+		gps_receiver = new BroadcastReceiver() {
+	        @Override
+	        public void onReceive(Context context, Intent intent) {
+	            
+	            // do something here.
+	            
+	        }
+	    };
+		
+		
 	}
 
 	private void setupAdapter() {
@@ -86,6 +104,7 @@ public class MainActivity extends Activity implements PeerListListener{
     @Override
     public void onResume() {
         super.onResume();
+        
         registerReceiver(mReceiver, mIntentFilter);
     }
 
@@ -93,6 +112,8 @@ public class MainActivity extends Activity implements PeerListListener{
     public void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(gps_receiver);
+
         mWifi.setWifiEnabled(false);
         
     }
@@ -144,16 +165,13 @@ public class MainActivity extends Activity implements PeerListListener{
 	}
 	
 	
-	
-	
-	
-	
 	/* instance variables */
 	
 	private final IntentFilter mIntentFilter = new IntentFilter();
 	private Channel mChannel;
 	private WifiP2pManager mManager;
 	private WifiBroadcastReceiver mReceiver;
+	private BroadcastReceiver gps_receiver;
 	public boolean wifiEnabled = false;
     private List<WifiP2pDevice> mPeers = new ArrayList<WifiP2pDevice>();
     private String TAG = "MainActivity";
@@ -162,6 +180,7 @@ public class MainActivity extends Activity implements PeerListListener{
     private WifiManager mWifi;
     private ClientServerMaker mClientServerMaker;
     public boolean mSocketConnected = false;  /* May create problems with multiple devices */
+    TextView textView1;
 
 	
 	/* class variables */
