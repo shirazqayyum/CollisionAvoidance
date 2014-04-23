@@ -26,6 +26,13 @@ public class WriteGpsService extends Service implements LocationListener{
 	    mBroadcaster = LocalBroadcastManager.getInstance(this);
 	}
 	
+	@Override
+    public void onDestroy(){
+		mWriter.println("#");
+		super.onDestroy();
+	}
+
+	
 	/** method for clients */
     public void setWriter (PrintWriter print_writer){
     	mWriter = print_writer;
@@ -57,12 +64,9 @@ public class WriteGpsService extends Service implements LocationListener{
 			to_send += ((Float) location.getSpeed()).toString();
 			
 			mWriter.println(to_send);
-			if (mExternalLocation.length() != 0) {
+			if (mExternalLocation.length() != 0 && mExternalLocation != "#" ) {
 				calculateDistance(to_send);
-			} else {
-				++ctr;
-				sendResult("broadcast works"+ ctr + "");
-			}
+			} 
 		}
 		Log.d("MyLoc", "local: " + location.toString() );
 	}
@@ -110,6 +114,6 @@ public class WriteGpsService extends Service implements LocationListener{
     private LocalBroadcastManager mBroadcaster;
     public static final String DIST_RESULT = "com.hackathon.collisionavoidancewarning.REQUEST_PROCESSED";
     public static final String DIST_MSG = "MSG"; 
-    private int ctr = 0;
+    
 	
 }

@@ -49,7 +49,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							Log.d(TAG, "Location writer is created");
 
 							String msg;
-							while ( (msg = read_from_client.readLine()) != null ) {
+							while ( (msg = read_from_client.readLine()) != "#\n" ) {
 								Log.d("MyLoc", "from client: " + msg);
 								mService.setExternalLocation(msg);
 							}
@@ -84,7 +84,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 
 							
 							String msg;
-							while ( (msg = read_from_server.readLine()) != null ) {
+							while ( (msg = read_from_server.readLine()) != "#\n" ) {
 								Log.d("MyLoc", "from server: " + msg);
 								mService.setExternalLocation(msg);
 							}
@@ -128,7 +128,6 @@ public class ClientServerMaker implements ConnectionInfoListener{
 	private WriteGpsService  mService;
 	private WifiP2pInfo mInfo;
 	private Context mContext;
-	private LocationWriter mLoc_writer;
 	private String TAG = "ClientServerMaker";
 
 }

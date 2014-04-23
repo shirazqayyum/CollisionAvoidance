@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+   	android:background="@drawable/bkrnd"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -17,22 +18,38 @@
         android:layout_marginTop="17dp"
         android:text="Discover Peers" />
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/discPeers"
+        android:layout_below="@+id/discPeers"
+        android:layout_marginTop="18dp"
+        android:text="TextView" />
+
+    <Button
+        android:id="@+id/rangeSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="Set Range" />
+
     <ListView
         android:id="@+id/listViewPeers"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignLeft="@+id/discPeers"
-        android:layout_below="@+id/discPeers" >
-
+        android:layout_height="150dp"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="41dp" >
     </ListView>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignLeft="@+id/listViewPeers"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="27dp"
-        android:text="TextView" />
+    <NumberPicker
+        android:id="@+id/numberPicker1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/discPeers"
+        android:layout_below="@+id/discPeers" />
 
 </RelativeLayout>

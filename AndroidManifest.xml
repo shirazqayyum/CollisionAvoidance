@@ -35,6 +35,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name = "com.hackathon.collisionavoidancewarning.PedWarning">
+        </activity>
+        
         <receiver android:name=".WifiBroadcastReceiver" >
         </receiver>
 

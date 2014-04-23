@@ -25,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +36,11 @@ public class MainActivity extends Activity implements PeerListListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		Log.d(TAG, "onCreate called");
 		setupAdapter();
 		setupWifi();
-		
 		discoverPeers = (Button) findViewById(R.id.discPeers);
+		
 		discoverPeers.setOnClickListener(new View.OnClickListener() {
              public void onClick(View v) {
             	 mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -56,27 +58,59 @@ public class MainActivity extends Activity implements PeerListListener{
              }
          });
 		
-		final TextView textView1 = (TextView)findViewById(R.id.textView1);
+		collisionAlgo = new CollisionAlgorithm();
 		
+		textView1 = (TextView)findViewById(R.id.textView1);
+		
+		mNumPick = (NumberPicker)findViewById(R.id.numberPicker1);
+		mNumPick.setMaxValue(100);
+		mNumPick.setMinValue(5);
+		mNumPick.setValue(15);
+		
+		
+		
+		mRangeSet = (Button)findViewById(R.id.rangeSet);
+		Log.d(TAG, "here5");
+		mRangeSet.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	collisionAlgo.setRange(mNumPick.getValue());
+            }
+        });
+		
+
 		mGpsReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
 	            String s = intent.getStringExtra(WriteGpsService.DIST_MSG);
+	    
 	            // do something here.
+	            Log.d(TAG, "float_distance: " + s);
+	            if ( collisionAlgo.isClose(s) && !hasWarned ) {
+	            	hasWarned = true;
+	            	Intent i = new Intent(MainActivity.this, PedWarning.class);
+		            startActivity(i); 
+	            }
+	            
 	            textView1.setText(s);
+	            // fixed 5 meter hysteresis on reseting the warning
+	            //reset_distance = Float.toString( (float)( Float.parseFloat(s) - 5.0) );
+	            if ( collisionAlgo.isAway(s) && hasWarned ) {
+	            	hasWarned = false;
+	            }
 	        }
 	    };
-		
-		
 	}
+	
 
 	private void setupAdapter() {
 		/* Setup an array adapter to be used as a pipe b/w the mPeers array and the listView */
 		
 		mAdapter = new ArrayAdapter<WifiP2pDevice>(this,android.R.layout.simple_list_item_1, mPeers);
-		ListView listView = (ListView) findViewById(R.id.listViewPeers);
+		Log.d(TAG, "setupAdapter1");
+		ListView listView = (ListView)findViewById(R.id.listViewPeers);
+		Log.d(TAG, "setupAdapter2");
 		listView.setAdapter(mAdapter);
-		
+		Log.d(TAG, "setupAdapter3");
 		/* 
 		 * A user can select the device to connect to from the list view 
 		 */
@@ -110,12 +144,16 @@ public class MainActivity extends Activity implements PeerListListener{
     @Override
     public void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGpsReceiver);
-
-       // mWifi.setWifiEnabled(false);   
     }
 	
+
+    @Override
+    public void onDestroy() {
+    	mWifi.setWifiEnabled(false);
+    	unregisterReceiver(mReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGpsReceiver);
+    	super.onDestroy();
+    }
     /* PeerListListener interface method that needs to be implemented which finally gives an updated
      * list of the peers available after discovery. It also gets called when the peers are no longer available
      * (though still in proximity) usually happens when the user does not take any action 
@@ -178,8 +216,12 @@ public class MainActivity extends Activity implements PeerListListener{
     private WifiManager mWifi;
     private ClientServerMaker mClientServerMaker;
     public boolean mSocketConnected = false;  /* May create problems with multiple devices */
-    TextView textView1;
-
+    private TextView textView1;
+    private NumberPicker mNumPick;
+    private Button mRangeSet;
+    private CollisionAlgorithm collisionAlgo;
+    private static boolean hasWarned = false;
+    private	String reset_distance;
 	
 	/* class variables */
 }
