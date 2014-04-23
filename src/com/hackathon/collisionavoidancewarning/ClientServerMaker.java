@@ -22,7 +22,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
 	
 	public ClientServerMaker(Context c) {
 		this.mContext = c;
-		  // Bind to LocalService
+		  /* Bind to LocalService */
         Intent intent = new Intent(mContext, WriteGpsService.class);
         mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
@@ -33,7 +33,9 @@ public class ClientServerMaker implements ConnectionInfoListener{
 
 		if (info.groupFormed) {
 			if (info.isGroupOwner) {
+				
 				/* I am the group owner so create a server socket */
+				
 				Thread worker_server = new Thread(new Runnable(){
 					public void run() {
 						try {
@@ -53,14 +55,11 @@ public class ClientServerMaker implements ConnectionInfoListener{
 								Log.d("MyLoc", "from client: " + msg);
 								mService.setExternalLocation(msg);
 							}
-							
 							server_socket.close();
 							
 						} catch (IOException e) {
-						
 							e.printStackTrace();
-						} 
-						
+						} 	
 					}
 				});
 				worker_server.start();
@@ -81,28 +80,22 @@ public class ClientServerMaker implements ConnectionInfoListener{
 							//mLoc_writer = new LocationWriter(write_to_server, mContext);
 							Log.d(TAG, "connection with client made - i am the client");
 							mService.setWriter(write_to_server);
-
-							
+			
 							String msg;
 							while ( (msg = read_from_server.readLine()) != "#\n" ) {
 								Log.d("MyLoc", "from server: " + msg);
 								mService.setExternalLocation(msg);
-							}
-							
+							}							
 							socket_to_server.close();
 							
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
-				});
-				
-				
+				});		
 				worker_client.start();
 			}
-		} else {
-			
-		}
+		} 
 	}
 	
 	   /** Defines callbacks for service binding, passed to bindService() */
@@ -122,8 +115,7 @@ public class ClientServerMaker implements ConnectionInfoListener{
             mBound = false;
         }
     };
-	
-    
+	 
 	private boolean mBound;
 	private WriteGpsService  mService;
 	private WifiP2pInfo mInfo;

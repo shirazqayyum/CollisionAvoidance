@@ -38,6 +38,10 @@
         <activity android:name = "com.hackathon.collisionavoidancewarning.PedWarning">
         </activity>
         
+        <activity android:name = "com.hackathon.collisionavoidancewarning.CarWarning">
+        </activity>
+        
+        
         <receiver android:name=".WifiBroadcastReceiver" >
         </receiver>
 

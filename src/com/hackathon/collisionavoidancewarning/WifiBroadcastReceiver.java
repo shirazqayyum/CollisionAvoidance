@@ -57,17 +57,14 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 	        		}
 	        	} else {
 	        		/* For now just signal that we are not connected (may create problems with multiple devices) */
-	        		mActivity.mSocketConnected = false;
-	        		
+	        		mActivity.mSocketConnected = false;	
 	        	}
-
 	        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-
+	        	
 	        }
 	    }
 	 
-	 
-	 /* instance variables */
+	 	/* instance variables */
 	 
 	 	private WifiP2pManager mManager;
 	    private Channel mChannel;

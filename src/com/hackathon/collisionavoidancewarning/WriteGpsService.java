@@ -16,7 +16,6 @@ import android.util.Log;
 
 public class WriteGpsService extends Service implements LocationListener{
 
-	
 	@Override
 	public void onCreate(){
 		/* Grab the location manager and poll for position when position changes */
@@ -31,9 +30,8 @@ public class WriteGpsService extends Service implements LocationListener{
 		mWriter.println("#");
 		super.onDestroy();
 	}
-
 	
-	/** method for clients */
+	/* method for clients */
     public void setWriter (PrintWriter print_writer){
     	mWriter = print_writer;
     }
@@ -54,6 +52,20 @@ public class WriteGpsService extends Service implements LocationListener{
 		}	  
 	}
 	
+	/* Android has an activity recognition system that allows the phone   
+	 * to determine the user's current activity, such as, walking,
+	 * driving or standing still etc.
+	 * 
+	 * We are packaging this along with the location data (implemented below)
+	 * and inform the system on the other end to make better and informed decisions
+	 * about the mobility of the current device.
+	 */
+	
+	
+	// The app is smart..it gives you more assistance when you need it..it knows when ts snowing..raingin or dark
+	// checking the weather - rain snow
+	// checking light intensity - ajdust warning radius
+	//
 	@Override
 	public void onLocationChanged(Location location) {
 		if (mWriter != null) {		
@@ -74,15 +86,12 @@ public class WriteGpsService extends Service implements LocationListener{
 	@Override
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
-	
 	
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -91,6 +100,7 @@ public class WriteGpsService extends Service implements LocationListener{
 	
 	public void calculateDistance(String d) {
 		/* parse the external location first */
+		
 		float[] results = { 0 };
 		String[] inArray = mExternalLocation.split("\\s+");
 		String[] outArray = d.split("\\s+");
@@ -98,7 +108,6 @@ public class WriteGpsService extends Service implements LocationListener{
 				Double.parseDouble(outArray[0]), Double.parseDouble(outArray[1]), results);
 		sendResult(""+results[0]);
 	}
-	
 	
 	public void sendResult(String message) {
 	    Intent intent = new Intent(DIST_RESULT);
@@ -109,11 +118,10 @@ public class WriteGpsService extends Service implements LocationListener{
 
 	/* Binder given to clients */
     private final IBinder mBinder = new LocalBinder();
+    
     private PrintWriter mWriter;
     private String mExternalLocation = "";
     private LocalBroadcastManager mBroadcaster;
     public static final String DIST_RESULT = "com.hackathon.collisionavoidancewarning.REQUEST_PROCESSED";
     public static final String DIST_MSG = "MSG"; 
-    
-	
 }

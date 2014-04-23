@@ -65,10 +65,9 @@ public class MainActivity extends Activity implements PeerListListener{
 		mNumPick = (NumberPicker)findViewById(R.id.numberPicker1);
 		mNumPick.setMaxValue(100);
 		mNumPick.setMinValue(5);
-		mNumPick.setValue(15);
-		
-		
-		
+		mNumPick.setValue(35);
+		mNumPick.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+	
 		mRangeSet = (Button)findViewById(R.id.rangeSet);
 		Log.d(TAG, "here5");
 		mRangeSet.setOnClickListener(new View.OnClickListener() {
@@ -76,24 +75,23 @@ public class MainActivity extends Activity implements PeerListListener{
             	collisionAlgo.setRange(mNumPick.getValue());
             }
         });
-		
-
+				
 		mGpsReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {
 	            String s = intent.getStringExtra(WriteGpsService.DIST_MSG);
 	    
-	            // do something here.
 	            Log.d(TAG, "float_distance: " + s);
 	            if ( collisionAlgo.isClose(s) && !hasWarned ) {
 	            	hasWarned = true;
-	            	Intent i = new Intent(MainActivity.this, PedWarning.class);
+	            	Intent i = new Intent(MainActivity.this,CarWarning.class);
 		            startActivity(i); 
 	            }
 	            
 	            textView1.setText(s);
-	            // fixed 5 meter hysteresis on reseting the warning
-	            //reset_distance = Float.toString( (float)( Float.parseFloat(s) - 5.0) );
+	            
+	            /* fixed 5 meter hysteresis on reseting the warning */
+	            
 	            if ( collisionAlgo.isAway(s) && hasWarned ) {
 	            	hasWarned = false;
 	            }
@@ -154,10 +152,12 @@ public class MainActivity extends Activity implements PeerListListener{
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mGpsReceiver);
     	super.onDestroy();
     }
+    
     /* PeerListListener interface method that needs to be implemented which finally gives an updated
      * list of the peers available after discovery. It also gets called when the peers are no longer available
      * (though still in proximity) usually happens when the user does not take any action 
      */
+    
     @Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
     	 mPeers.clear();
@@ -199,7 +199,7 @@ public class MainActivity extends Activity implements PeerListListener{
 	ClientServerMaker getClientServerMaker() {
 		return this.mClientServerMaker;
 	}
-	
+
 	
 	/* instance variables */
 	
@@ -220,8 +220,9 @@ public class MainActivity extends Activity implements PeerListListener{
     private NumberPicker mNumPick;
     private Button mRangeSet;
     private CollisionAlgorithm collisionAlgo;
-    private static boolean hasWarned = false;
     private	String reset_distance;
 	
 	/* class variables */
+	
+	private static boolean hasWarned = false;
 }
