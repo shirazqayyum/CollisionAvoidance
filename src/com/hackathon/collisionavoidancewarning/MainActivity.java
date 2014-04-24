@@ -100,8 +100,10 @@ public class MainActivity extends Activity implements PeerListListener{
 	}
 	
 
+	/**  Setup an array adapter to be used as a pipe b/w the mPeers array and the listView
+	 *  
+	 */
 	private void setupAdapter() {
-		/* Setup an array adapter to be used as a pipe b/w the mPeers array and the listView */
 		
 		mAdapter = new ArrayAdapter<WifiP2pDevice>(this,android.R.layout.simple_list_item_1, mPeers);
 		Log.d(TAG, "setupAdapter1");
@@ -131,7 +133,7 @@ public class MainActivity extends Activity implements PeerListListener{
 		return true;
 	}
     
-	/** register the BroadcastReceiver with the intent values to be matched */
+	/** Register the BroadcastReceiver with the intent values to be matched */
     @Override
     public void onResume() {
         super.onResume();
@@ -153,11 +155,11 @@ public class MainActivity extends Activity implements PeerListListener{
     	super.onDestroy();
     }
     
-    /* PeerListListener interface method that needs to be implemented which finally gives an updated
-     * list of the peers available after discovery. It also gets called when the peers are no longer available
-     * (though still in proximity) usually happens when the user does not take any action 
-     */
     
+    /** PeerListListener interface method that needs to be implemented which finally gives an updated
+     * list of the peers available after discovery. It also gets called when the peers are no longer available
+     * (though still in proximity) usually happens when the user does not take any action
+     */
     @Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
     	 mPeers.clear();
@@ -170,6 +172,10 @@ public class MainActivity extends Activity implements PeerListListener{
 	}
     
     
+	/** A helper method to set up the Wi-Fi Direct for the application
+	 * Sets up the intent filters and grabs WifiP2pManager alongwith
+	 * the channel
+	 */
 	private void setupWifi() {
 		
 		mWifi = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -196,7 +202,12 @@ public class MainActivity extends Activity implements PeerListListener{
         mClientServerMaker = new ClientServerMaker(this);
 	}
 	
-	ClientServerMaker getClientServerMaker() {
+	/** Returns the local instance of the ClientServerMaker object 
+	 * that the MainActivity class holds
+	 * @return ClientServerMaker object that is used after an intial Wi-Fi direct
+	 * 			connection is setup
+	 */
+	public ClientServerMaker getClientServerMaker() {
 		return this.mClientServerMaker;
 	}
 

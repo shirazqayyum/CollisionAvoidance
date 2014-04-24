@@ -9,8 +9,18 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
 import android.widget.Toast;
 
+/** The Wi-Fi broadcast receiver class written to check state of the Wi-Fi direct
+ * as directed by the framework
+ * @author shiraz
+ *
+ */
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
+	/**
+	 * @param manager The WiFiP2pmanager
+	 * @param channel The channel associated with the wifi manager
+	 * @param activity The Android activity that will register for this receiver
+	 */
 	public WifiBroadcastReceiver(WifiP2pManager manager, Channel channel, MainActivity activity) {
         super();
         this.mManager = manager;
@@ -18,7 +28,10 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
         this.mActivity = activity;
     }
 
-	 @Override
+	 /* (non-Javadoc)
+	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
 	    public void onReceive(Context context, Intent intent) {
 	        String action = intent.getAction();
 	        if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {

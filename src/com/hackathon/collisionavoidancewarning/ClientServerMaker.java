@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +26,9 @@ public class ClientServerMaker implements ConnectionInfoListener{
         mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener#onConnectionInfoAvailable(android.net.wifi.p2p.WifiP2pInfo)
+	 */
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
 		mInfo = info;
