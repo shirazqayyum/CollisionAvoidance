@@ -14,3 +14,5 @@ Requirements:
 1) Two phones within Wi-Fi communication range
 2) Clear GPS signal
 
+Demo video link:
+http://shirazqayyum.github.io/GuardianAngel/
